@@ -5,6 +5,7 @@ import "./globals.css";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 // Note: metadata export removed due to use client directive
 // Title: AI 블로그 작성 도우미
@@ -35,20 +36,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link href="/" className="text-sm font-bold no-underline hover:no-underline text-[var(--text)]">
-                🏠 App
+                블로그 도우미
               </Link>
-              <div className="flex items-center gap-4">
-                <Link href="/" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-all duration-150">
-                  Home
+              <div className="flex items-center gap-1">
+                <Link href="/">
+                  <Button variant="ghost" size="sm" className="text-xs">
+                    Home
+                  </Button>
                 </Link>
-                <Link href="/train" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-all duration-150">
-                  Train
+                <Link href="/train">
+                  <Button variant="ghost" size="sm" className="text-xs">
+                    Train
+                  </Button>
                 </Link>
-                <Link href="/generate" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-all duration-150">
-                  Generate
+                <Link href="/generate">
+                  <Button variant="ghost" size="sm" className="text-xs">
+                    Generate
+                  </Button>
                 </Link>
-                <Link href="/history" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)] transition-all duration-150">
-                  History
+                <Link href="/history">
+                  <Button variant="ghost" size="sm" className="text-xs">
+                    History
+                  </Button>
                 </Link>
               </div>
             </div>
@@ -56,28 +65,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="flex items-center gap-3">
               {user ? (
                 <>
-                  <span className="text-xs text-[var(--text-muted)]">Logged in: {user.email}</span>
-                  <button
+                  <span className="text-xs text-[var(--text-muted)]">{user.email}</span>
+                  <Button
                     onClick={handleLogout}
-                    className="text-xs px-3 py-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-card)] transition-all duration-150 cursor-pointer"
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-[var(--danger)]"
                   >
                     Logout
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
-                  <span className="text-xs text-[var(--text-muted)]">Logged out</span>
-                  <Link
-                    href="/login"
-                    className="text-xs px-3 py-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] no-underline hover:bg-[var(--bg-card)] transition-all duration-150"
-                  >
-                    Login
+                  <Link href="/login">
+                    <Button variant="ghost" size="sm" className="text-xs">
+                      Login
+                    </Button>
                   </Link>
-                  <Link
-                    href="/signup"
-                    className="text-xs px-3 py-1.5 rounded-md bg-[var(--accent)] text-white no-underline hover:opacity-90 transition-all duration-150"
-                  >
-                    Sign Up
+                  <Link href="/signup">
+                    <Button variant="default" size="sm" className="text-xs">
+                      Sign Up
+                    </Button>
                   </Link>
                 </>
               )}

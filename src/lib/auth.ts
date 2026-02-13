@@ -98,3 +98,32 @@ export async function requireUser(): Promise<{ id: string }> {
   }
   return { id: user.id.toString() };
 }
+
+// ── Session APIs for tests ──
+
+export type SessionData = {
+  user: { id: string };
+  trained: boolean;
+} | null;
+
+/**
+ * Get session data with trained status (for server components)
+ */
+export async function getSession(): Promise<SessionData> {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  // Check if user has tone profile
+  const db = (await import("@/lib/db")).db;
+  const toneProfile = db
+    .prepare("SELECT trained_at FROM tone_profiles WHERE user_id = ?")
+    .get(user.id) as { trained_at: string | null } | undefined;
+
+  return {
+    user: { id: user.id.toString() },
+    trained: !!toneProfile?.trained_at,
+  };
+}
+
+// ── Re-export client-side hooks ──
+export { useClientSession, logout } from "@/lib/auth-client";

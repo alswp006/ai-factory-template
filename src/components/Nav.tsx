@@ -1,25 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { useClientSession, logout } from "@/lib/auth";
 
 export function Nav() {
   const router = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState<{ id: number; name: string; email: string } | null>(null);
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => setUser(data?.user ?? null))
-      .catch(() => setUser(null));
-  }, [pathname]);
+  const session = useClientSession();
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    setUser(null);
+    await logout();
     router.push("/");
+    router.refresh();
   };
 
   return (
@@ -46,9 +39,9 @@ export function Nav() {
         </div>
 
         <div className="flex items-center gap-3">
-          {user ? (
+          {session.status === "authenticated" && session.data ? (
             <>
-              <span className="text-xs text-[var(--text-muted)]">Logged in: {user.email}</span>
+              <span className="text-xs text-[var(--text-muted)]">Logged in</span>
               <button
                 onClick={handleLogout}
                 className="text-xs px-3 py-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-card)] transition-all duration-150 cursor-pointer"
@@ -78,3 +71,5 @@ export function Nav() {
     </nav>
   );
 }
+
+export default Nav;
