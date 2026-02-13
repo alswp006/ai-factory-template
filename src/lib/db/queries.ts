@@ -91,3 +91,83 @@ export async function deleteDraft(draftId: string, userId: string) {
     },
   });
 }
+
+/**
+ * List drafts for a user (for history view)
+ * Returns minimal fields: id, createdAt, requestSummary (derived from title)
+ */
+export async function listDraftsByUserId(userId: string) {
+  const drafts = await prisma.draft.findMany({
+    where: { userId: parseInt(userId, 10) },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      createdAt: true,
+      title: true,
+    },
+  });
+
+  return drafts.map((draft) => ({
+    id: draft.id.toString(),
+    createdAt: draft.createdAt.toISOString(),
+    requestSummary: draft.title,
+  }));
+}
+
+/**
+ * Get a single draft by ID for a user (user-scoped)
+ * Returns null if not found or not owned by user
+ */
+export async function getDraftByIdForUserId(id: string, userId: string) {
+  const draft = await prisma.draft.findFirst({
+    where: {
+      id: parseInt(id, 10),
+      userId: parseInt(userId, 10),
+    },
+  });
+
+  if (!draft) return null;
+
+  return {
+    id: draft.id.toString(),
+    generatedText: draft.generatedText,
+    editedText: draft.editedText,
+    createdAt: draft.createdAt.toISOString(),
+    requestSummary: draft.title,
+  };
+}
+
+/**
+ * Update editedText for a draft (user-scoped)
+ * Returns the updated draft or null if not found/not owned
+ */
+export async function updateDraftEditedText({
+  id,
+  userId,
+  editedText,
+}: {
+  id: string;
+  userId: string;
+  editedText: string;
+}) {
+  // First verify ownership
+  const existing = await prisma.draft.findFirst({
+    where: {
+      id: parseInt(id, 10),
+      userId: parseInt(userId, 10),
+    },
+  });
+
+  if (!existing) return null;
+
+  const updated = await prisma.draft.update({
+    where: { id: parseInt(id, 10) },
+    data: { editedText },
+  });
+
+  return {
+    id: updated.id.toString(),
+    userId: updated.userId.toString(),
+    editedText: updated.editedText,
+  };
+}

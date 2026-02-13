@@ -86,3 +86,15 @@ export function validateSessionToken(token: string): boolean {
   }
   return true;
 }
+
+/**
+ * Require authenticated user or throw 401
+ * Returns user with id as string for convenience
+ */
+export async function requireUser(): Promise<{ id: string }> {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+  return { id: user.id.toString() };
+}
