@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { validateEmail, validatePassword } from "@/lib/validation";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -10,12 +11,45 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (value) {
+      const err = validateEmail(value);
+      setEmailError(err ?? "");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (value) {
+      const err = validatePassword(value);
+      setPasswordError(err ?? "");
+    } else {
+      setPasswordError("");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Validate before submit
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+
+    if (emailErr || passwordErr) {
+      setEmailError(emailErr ?? "");
+      setPasswordError(passwordErr ?? "");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -32,7 +66,8 @@ export default function SignupPage() {
         return;
       }
 
-      router.push("/dashboard");
+      // Redirect to /train for new users
+      router.push("/train");
       router.refresh();
     } catch {
       setError("Network error. Please try again.");
@@ -73,10 +108,15 @@ export default function SignupPage() {
               type="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-md bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] transition-all duration-150"
+              onChange={(e) => handleEmailChange(e.target.value)}
+              className={`w-full px-3 py-2 text-sm rounded-md bg-[var(--bg-input)] border text-[var(--text)] focus:outline-none transition-all duration-150 ${
+                emailError ? "border-[var(--danger)]" : "border-[var(--border)] focus:border-[var(--accent)]"
+              }`}
               placeholder="you@example.com"
             />
+            {emailError && (
+              <p className="text-xs text-[var(--danger)] mt-1">{emailError}</p>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -84,17 +124,21 @@ export default function SignupPage() {
             <input
               type="password"
               required
-              minLength={6}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-md bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] transition-all duration-150"
-              placeholder="At least 6 characters"
+              onChange={(e) => handlePasswordChange(e.target.value)}
+              className={`w-full px-3 py-2 text-sm rounded-md bg-[var(--bg-input)] border text-[var(--text)] focus:outline-none transition-all duration-150 ${
+                passwordError ? "border-[var(--danger)]" : "border-[var(--border)] focus:border-[var(--accent)]"
+              }`}
+              placeholder="At least 8 characters"
             />
+            {passwordError && (
+              <p className="text-xs text-[var(--danger)] mt-1">{passwordError}</p>
+            )}
           </div>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !!emailError || !!passwordError}
             className="w-full py-2 text-sm font-medium rounded-md bg-[var(--accent)] text-white hover:opacity-90 disabled:opacity-50 transition-all duration-150 cursor-pointer"
           >
             {loading ? "Creating account..." : "Sign Up"}

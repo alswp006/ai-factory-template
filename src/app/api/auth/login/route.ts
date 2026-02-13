@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { authenticateUser } from "@/lib/models/user";
 import { createSession } from "@/lib/auth";
+import { getToneProfile } from "@/lib/db/queries";
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +19,11 @@ export async function POST(request: Request) {
 
     await createSession(user.id);
 
-    return NextResponse.json({ user });
+    // Check if user has tone profile
+    const toneProfile = await getToneProfile(user.id.toString());
+    const hasToneProfile = !!toneProfile;
+
+    return NextResponse.json({ user, hasToneProfile });
   } catch (error) {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }

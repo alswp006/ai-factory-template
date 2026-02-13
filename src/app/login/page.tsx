@@ -33,7 +33,12 @@ export default function LoginPage() {
         return;
       }
 
-      router.push(redirect);
+      // Redirect based on tone profile status
+      if (data.hasToneProfile) {
+        router.push(redirect === "/dashboard" ? redirect : "/dashboard");
+      } else {
+        router.push("/train");
+      }
       router.refresh();
     } catch {
       setError("Network error. Please try again.");
