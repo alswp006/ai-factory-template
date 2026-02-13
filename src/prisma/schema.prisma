@@ -1,0 +1,55 @@
+// Prisma schema for blog-writer app
+// DB: SQLite with better-sqlite3
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../../app.db"
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  name         String        @default("")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  toneProfile  ToneProfile?
+  drafts       Draft[]
+
+  @@map("users")
+}
+
+model ToneProfile {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  tone      String   @default("professional")
+  style     String   @default("informative")
+  audience  String   @default("general")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tone_profiles")
+}
+
+model Draft {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  generatedText String   @map("generated_text")
+  editedText    String?  @map("edited_text")
+  title         String   @default("")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("drafts")
+}
