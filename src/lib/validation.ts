@@ -30,3 +30,13 @@ export function validateRequired(value: string, fieldName: string): string | nul
 
   return null;
 }
+
+export function validateTrainingUrl(url: string): { ok: true; value: { url: string } } | { ok: false; errors: { url: string } } {
+  const trimmedUrl = url.trim();
+
+  if (!trimmedUrl) {
+    return { ok: false, errors: { url: "URL is required" } };
+  }
+
+  return { ok: true, value: { url: trimmedUrl } };
+}
