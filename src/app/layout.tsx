@@ -3,8 +3,8 @@ import "./globals.css";
 import { Nav } from "@/components/ui/nav";
 
 export const metadata: Metadata = {
-  title: "App",
-  description: "Built with AI Factory",
+  title: "AI 블로그 작성 도우미",
+  description: "사용자 말투를 학습해 맛집/테크/일상 등 다양한 주제의 블로그 글을 AI가 자동 생성하는 개인용 웹앱",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
