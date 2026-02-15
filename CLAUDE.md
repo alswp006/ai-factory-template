@@ -10,12 +10,6 @@
 - IMPORTANT: Always use --ignore-workspace with pnpm to avoid monorepo interference
 - Build: npx next build (verify it passes before finishing)
 
-## CRITICAL: Edge Runtime Restrictions
-- middleware.ts runs in Edge Runtime — it CANNOT import anything that uses Node.js modules (fs, path, crypto, better-sqlite3, bcryptjs)
-- middleware.ts should ONLY check cookies via `request.cookies.get()` — NEVER import from lib/auth.ts or lib/db.ts
-- If you need to validate sessions in middleware, check cookie existence only (actual validation happens in API routes/server components)
-- API routes and Server Components run in Node.js runtime — they CAN import anything
-
 ## Pre-built Auth (DO NOT RECREATE)
 - src/lib/auth.ts — cookie sessions + bcrypt
 - src/lib/models/user.ts — user CRUD

@@ -1,10 +1,3 @@
-/**
- * Auth library — cookie sessions + bcrypt hashing
- * 
- * ⚠️ WARNING: This file uses Node.js modules (crypto, bcryptjs).
- * DO NOT import this in middleware.ts (Edge Runtime).
- * Middleware should only check cookies via request.cookies.get().
- */
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
