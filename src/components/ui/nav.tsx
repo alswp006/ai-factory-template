@@ -30,6 +30,9 @@ export function Nav() {
         </Link>
 
         <div className="flex items-center gap-3">
+          <Link href="/pricing" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">
+            Pricing
+          </Link>
           {user ? (
             <>
               <Link href="/dashboard" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">
