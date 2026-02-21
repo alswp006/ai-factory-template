@@ -1,9 +1,14 @@
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, destroySession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) {
+    // Clear any stale session cookie before redirecting.
+    // The "logged_out" param tells middleware not to redirect back here.
+    await destroySession();
+    redirect("/login?logged_out");
+  }
 
   return (
     <div className="space-y-6">

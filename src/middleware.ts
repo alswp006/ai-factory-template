@@ -22,7 +22,16 @@ export function middleware(request: NextRequest) {
   }
 
   if (isAuthRoute && sessionToken) {
-    // Already logged in → redirect to dashboard
+    // Cookie exists — redirect to dashboard.
+    // If the session is actually stale (e.g. server restart cleared in-memory store),
+    // the dashboard page will clear the cookie and redirect back here.
+    // The "logged_out" param prevents an infinite loop: if we just came from
+    // a failed session check, don't redirect again.
+    if (request.nextUrl.searchParams.has("logged_out")) {
+      const response = NextResponse.next();
+      response.cookies.delete("session_token");
+      return response;
+    }
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

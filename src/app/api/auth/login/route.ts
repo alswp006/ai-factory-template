@@ -3,9 +3,15 @@ import { authenticateUser } from "@/lib/models/user";
 import { createSession } from "@/lib/auth";
 
 export async function POST(request: Request) {
+  let body: Record<string, unknown>;
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  try {
+    const { email, password } = body as { email?: string; password?: string };
 
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
@@ -19,7 +25,7 @@ export async function POST(request: Request) {
     await createSession(user.id);
 
     return NextResponse.json({ user });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }

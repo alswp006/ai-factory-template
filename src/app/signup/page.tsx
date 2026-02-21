@@ -60,6 +60,7 @@ export default function SignupPage() {
             <label className="text-xs font-medium text-[var(--text-secondary)]">Name</label>
             <input
               type="text"
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 text-sm rounded-md bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] transition-all duration-150"
