@@ -8,7 +8,8 @@
 ## Commands
 - pnpm install --ignore-workspace / build / typecheck / test / dev
 - IMPORTANT: Always use --ignore-workspace with pnpm to avoid monorepo interference
-- Build: npx next build (verify it passes before finishing)
+- Build: npx next build --experimental-app-only (verify it passes before finishing)
+- IMPORTANT: Always use --experimental-app-only with next build to avoid Turbopack Pages Router errors in Next.js 15.5+
 
 ## Pre-built Auth (DO NOT RECREATE)
 - src/lib/auth.ts — cookie sessions + bcrypt
