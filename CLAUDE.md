@@ -28,6 +28,12 @@
 - TypeScript strict, Next.js 15 App Router, all files in src/
 - Tailwind CSS only (no inline styles), no .eslintrc files
 
+## CRITICAL: CSS Specificity in globals.css (Tailwind v4)
+- Tailwind v4 uses `@import "tailwindcss"` which puts all utilities inside `@layer`
+- Any CSS rule OUTSIDE of `@layer` will override Tailwind utilities (e.g., `text-white`)
+- ALWAYS wrap base styles (like `a { color }`) inside `@layer base { }`
+- globals.css already has `a` styles in `@layer base` — do NOT move them out
+
 ## Design System
 Colors (CSS vars ONLY — never hardcode):
 - bg: var(--bg), var(--bg-elevated), var(--bg-card), var(--bg-input)
@@ -36,10 +42,17 @@ Colors (CSS vars ONLY — never hardcode):
 - accent: var(--accent), var(--accent-soft)
 - semantic: var(--success-soft), var(--danger-soft), var(--warning-soft)
 
-Spacing: page=space-y-10, section=space-y-6, card-padding=p-6, fields=space-y-4
+Spacing (CRITICAL — generous spacing prevents cramped UI):
+- page=space-y-10, section=space-y-6, card-padding=p-6 md:p-8
+- Form fields=space-y-5 (NOT space-y-4), label→input=space-y-2 (NOT space-y-1.5)
+- Heading→subtitle=space-y-2, stat value→label=mt-1.5
+- Info rows (label/value pairs)=space-y-1.5 per item, gap-6 between columns
+- Body line-height: 1.7 (already set in globals.css — do NOT reduce)
+- MINIMUM: Never use space-y-0.5 or mt-0.5 for text elements
+
 Typography: title=text-2xl font-bold, section=text-lg font-semibold, body=text-sm, meta=text-xs text-[var(--text-muted)]
 States: loading=skeleton class, empty=centered icon+heading+CTA, error=danger-soft banner
-Transitions: transition-all duration-150 on interactive elements
+Transitions: transition-all duration-200 on interactive elements
 
 ## Navigation
 - Every page reachable from header nav. Login<->Signup cross-linked.
