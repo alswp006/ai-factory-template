@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface CtaSectionProps {
   heading: string;
@@ -24,12 +25,11 @@ export function CtaSection({
             </p>
           )}
           <div className="pt-2">
-            <Link
-              href={ctaHref}
-              className="inline-block px-6 py-3 rounded-xl bg-[var(--accent)] text-white font-medium text-sm no-underline hover:opacity-90 transition-opacity shadow-lg shadow-[var(--accent)]/25"
-            >
-              {ctaText}
-            </Link>
+            <Button asChild size="lg">
+              <Link href={ctaHref} className="no-underline">
+                {ctaText}
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

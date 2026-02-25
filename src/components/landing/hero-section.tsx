@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface HeroSectionProps {
   headline: string;
@@ -27,19 +28,17 @@ export function HeroSection({
           {subheadline}
         </p>
         <div className="flex gap-3 pt-2">
-          <Link
-            href={ctaHref}
-            className="px-6 py-3 rounded-xl bg-[var(--accent)] text-white font-medium text-sm no-underline hover:opacity-90 transition-opacity shadow-lg shadow-[var(--accent)]/25"
-          >
-            {ctaText}
-          </Link>
-          {secondaryCtaText && secondaryCtaHref && (
-            <Link
-              href={secondaryCtaHref}
-              className="px-6 py-3 rounded-xl border border-[var(--border)] text-[var(--text-secondary)] font-medium text-sm no-underline hover:bg-[var(--bg-card)] transition-colors"
-            >
-              {secondaryCtaText}
+          <Button asChild size="lg">
+            <Link href={ctaHref} className="no-underline">
+              {ctaText}
             </Link>
+          </Button>
+          {secondaryCtaText && secondaryCtaHref && (
+            <Button asChild variant="outline" size="lg">
+              <Link href={secondaryCtaHref} className="no-underline">
+                {secondaryCtaText}
+              </Link>
+            </Button>
           )}
         </div>
       </div>

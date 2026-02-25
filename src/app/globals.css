@@ -1,4 +1,28 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--bg-card);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--bg-elevated);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--accent);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--bg-elevated);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--bg-elevated);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent-color: var(--accent-soft);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: #ffffff;
+  --color-border-color: var(--border);
+  --color-input: var(--bg-input);
+  --color-ring: var(--accent);
+  --radius: 0.75rem;
+}
 
 :root {
   --bg: #0a0a0f;
@@ -20,34 +44,37 @@
   --warning-soft: rgba(251, 191, 36, 0.12);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.7;
-}
-
-::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: var(--text);
-}
-
-/* Base styles in @layer so Tailwind utilities (text-white etc.) can override */
+/* ══ CRITICAL: ALL base styles MUST be in @layer base ══
+   Tailwind v4 puts utilities in @layer utilities.
+   CSS outside @layer has HIGHER specificity and overrides utilities.
+   Without @layer base, even `* { padding: 0 }` kills pt-16, px-4, gap-6, etc. */
 @layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.7;
+  }
+
+  ::selection {
+    background: rgba(99, 102, 241, 0.3);
+    color: var(--text);
+  }
+
   a {
     color: var(--accent);
     text-decoration: none;
@@ -57,7 +84,7 @@ body {
   }
 }
 
-/* Scrollbar */
+/* Scrollbar (pseudo-elements — no Tailwind conflict) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -73,33 +100,23 @@ body {
   background: var(--text-muted);
 }
 
-/* Card utility */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  transition: all 0.3s ease;
-}
-.card:hover {
-  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
-  border-color: rgba(99, 102, 241, 0.3);
-}
+@layer components {
+  /* Hero grid background */
+  .hero-grid-bg {
+    background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.07) 1px, transparent 0);
+    background-size: 36px 36px;
+  }
 
-/* Hero grid background */
-.hero-grid-bg {
-  background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.07) 1px, transparent 0);
-  background-size: 36px 36px;
-}
+  /* Gradient text utility */
+  .gradient-text {
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.55) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.55) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Glow utilities */
-.glow-accent {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+  /* Glow utilities */
+  .glow-accent {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+  }
 }

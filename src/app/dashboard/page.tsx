@@ -1,12 +1,13 @@
-import { getCurrentUser, destroySession } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
   if (!user) {
-    // Clear any stale session cookie before redirecting.
-    // The "logged_out" param tells middleware not to redirect back here.
-    await destroySession();
+    // Stale session — redirect with logged_out param so middleware
+    // clears the cookie instead of redirecting back here in a loop.
+    // NOTE: Do NOT call destroySession() here — Server Components cannot
+    // modify cookies (Next.js 15). Middleware handles cookie deletion.
     redirect("/login?logged_out");
   }
 

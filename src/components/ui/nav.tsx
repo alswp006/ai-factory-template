@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export function Nav() {
   const router = useRouter();
@@ -29,37 +30,36 @@ export function Nav() {
           🏠 App
         </Link>
 
-        <div className="flex items-center gap-3">
-          <Link href="/pricing" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">
-            Pricing
-          </Link>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/pricing" className="no-underline">
+              Pricing
+            </Link>
+          </Button>
           {user ? (
             <>
-              <Link href="/dashboard" className="text-xs text-[var(--text-secondary)] no-underline hover:text-[var(--text)]">
-                Dashboard
-              </Link>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/dashboard" className="no-underline">
+                  Dashboard
+                </Link>
+              </Button>
               <span className="text-xs text-[var(--text-muted)]">{user.email}</span>
-              <button
-                onClick={handleLogout}
-                className="text-xs px-3 py-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-card)] transition-all duration-150 cursor-pointer"
-              >
+              <Button variant="outline" size="sm" onClick={handleLogout}>
                 Logout
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="text-xs px-3 py-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] no-underline hover:bg-[var(--bg-card)] transition-all duration-150"
-              >
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="text-xs px-3 py-1.5 rounded-md bg-[var(--accent)] text-white no-underline hover:opacity-90 transition-all duration-150"
-              >
-                Sign Up
-              </Link>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/login" className="no-underline">
+                  Login
+                </Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/signup" className="no-underline">
+                  Sign Up
+                </Link>
+              </Button>
             </>
           )}
         </div>
