@@ -31,11 +31,6 @@ export function Nav() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/pricing" className="no-underline">
-              Pricing
-            </Link>
-          </Button>
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild>

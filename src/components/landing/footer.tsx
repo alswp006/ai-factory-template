@@ -22,7 +22,6 @@ export function Footer({ columns, copyright }: FooterProps) {
     {
       title: "Product",
       links: [
-        { label: "Pricing", href: "/pricing" },
         { label: "Dashboard", href: "/dashboard" },
       ],
     },
